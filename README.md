@@ -1,4 +1,4 @@
-# mahdi-morsali.github.io
+# MahdiM7813.github.io
 Mahdi Morsali's Personal Website
 Overview
 This repository hosts the source code for my personal website, showcasing my academic and professional journey as a Biomedical Engineering graduate. The website highlights my education, work experience, skills, publications, projects, honors, and references. It is built using HTML, CSS, and Bootstrap, with a responsive design optimized for both desktop and mobile devices.
