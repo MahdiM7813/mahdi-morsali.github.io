@@ -1,0 +1,182 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahdi Morsali - Personal Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body class="page-index">
+    <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to content</a>
+    <header>
+        <nav class="navbar navbar-expand-lg" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Mahdi Morsali</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html" aria-current="page">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="education.html">Education</a></li>
+                        <li class="nav-item"><a class="nav-link" href="experience.html">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link" href="skills.html">Skills</a></li>
+                        <li class="nav-item"><a class="nav-link" href="publications.html">Publications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="honors.html">Honors & Awards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="references.html">References</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" class="container mt-5">
+        <section class="content-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="mahdi.jpg" alt="Profile photo of Mahdi Morsali" class="img-fluid rounded-circle profile-img" style="max-width: 200px;">
+                </div>
+                <div class="col-md-8">
+                    <h1>Mahdi Morsali</h1>
+                    <p>Tehran, Iran | mahdimorsal.a@gmail.com | (+98) 9215178643</p>
+                    <p>I am a Biomedical Engineering graduate with a Master's degree in Bioelectric Engineering from Iran University of Science and Technology (IUST). My research focuses on applying deep learning to medical image analysis, with a particular emphasis on pain detection through facial expressions—a work that bridges technology and patient care.</p>
+                    <p>In addition to my research experience, I have a practical background in medical equipment maintenance and teaching, which has strengthened my problem-solving skills and ability to communicate complex concepts clearly. I am deeply motivated to leverage cutting-edge technology to advance healthcare outcomes and contribute to meaningful scientific discoveries.</p>
+                    <p>Beyond academics, I am a creative and active individual who enjoys drawing, athletics, and engaging with scientific communities. I am eager to join a collaborative PhD program where I can further develop my expertise, contribute to innovative research, and make a tangible impact in the field of biomedical engineering.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row footer-sections">
+                <div class="col-md-3 footer-section">
+                    <h5>Contact Me</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope"></i> <a href="mailto:mahdimorsal.a@gmail.com" aria-label="Email Mahdi Morsali">mahdimorsal.a@gmail.com</a></li>
+                        <li><i class="bi bi-phone"></i> <a href="tel:+989215178643" aria-label="Call Mahdi Morsali">+98 9215178643</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 footer-section">
+                    <h5>Navigation</h5>
+                    <ul class="footer-nav list-unstyled">
+                        <li><a href="index.html" aria-label="Go to Home page">Home</a></li>
+                        <li><a href="education.html" aria-label="Go to Education page">Education</a></li>
+                        <li><a href="experience.html" aria-label="Go to Experience page">Experience</a></li>
+                        <li><a href="skills.html" aria-label="Go to Skills page">Skills</a></li>
+                        <li><a href="publications.html" aria-label="Go to Publications page">Publications</a></li>
+                        <li><a href="projects.html" aria-label="Go to Projects page">Projects</a></li>
+                        <li><a href="honors.html" aria-label="Go to Honors & Awards page">Honors</a></li>
+                        <li><a href="references.html" aria-label="Go to References page">References</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 footer-section">
+                    <h5>Connect</h5>
+                    <ul class="footer-social list-unstyled">
+                        <li><i class="bi bi-linkedin"></i> <a href="https://www.linkedin.com/in/mahdi-morsali-0bb919225/" target="_blank" rel="noopener" aria-label="Visit Mahdi Morsali's LinkedIn profile">LinkedIn</a></li>
+                        <li><i class="bi bi-book"></i> <a href="https://www.researchgate.net/profile/Mahdi-Morsali-2" target="_blank" rel="noopener" aria-label="Visit Mahdi Morsali's ResearchGate profile">ResearchGate</a></li>
+                        <li><i class="bi bi-google"></i> <a href="https://scholar.google.com/citations?user=46rkpHoAAAAJ&hl=en" target="_blank" rel="noopener" aria-label="Visit Mahdi Morsali's Google Scholar profile">Google Scholar</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 footer-section">
+                    <h5>Quick Stats</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-journal-text"></i> Publications: 2</li>
+                        <li><i class="bi bi-quote"></i> Citations: 1</li>
+                        <li><i class="bi bi-eye"></i> Reads: 22</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row footer-bottom">
+                <div class="col-12 text-center">
+                    <p class="footer-cta">Let’s collaborate to innovate in biomedical engineering and advance healthcare solutions!</p>
+                    <p class="footer-copyright">© 2025 Mahdi Morsali. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" aria-label="Back to top">↑</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Page transition and animation trigger
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = link.href;
+                }, 300);
+            });
+        });
+
+        // Scroll reveal for content sections and footer
+        const sections = document.querySelectorAll('.content-section, .footer');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+
+        // Back to top button
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
